@@ -105,7 +105,7 @@ Step 4: SLIDE-DECK.md をAIツールへ → スライド完成
 
 99種類のレイアウトパターンをブラウザで一覧確認できます。
 
-**→ https://sho-ai-magic.github.io/slide.md/**
+**→ <a href="https://sho-ai-magic.github.io/slide.md/" target="_blank">https://sho-ai-magic.github.io/slide.md/</a>**
 
 ![SLIDE-PATTERN ギャラリー](docs/Gallery.png)
 
