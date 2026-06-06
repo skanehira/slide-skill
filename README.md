@@ -2,6 +2,8 @@
 
 **AIとスライドを作るための設計書フォーマットと、それを生成するClaude Codeスキルパッケージ。**
 
+![アイキャッチ](docs/slide-sample-01.png)
+
 [Google DESIGN.md](https://stitch.withgoogle.com/docs/design-md/overview) のコンセプトに着想を得た、スライドに特化した設計書フォーマット「SLIDE.md」の仕様と、それを自動生成するClaude Codeスキルを公開しています。
 
 ---
