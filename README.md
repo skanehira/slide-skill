@@ -1,4 +1,4 @@
-# slide-md
+# SLIDE.md
 
 **AIとスライドを作るための、Claude Codeスキルパッケージ。**
 
@@ -65,7 +65,7 @@ Step 4: SLIDE-DECK.md をAIツールへ → スライド完成
 
 99種類のレイアウトパターンをブラウザで一覧確認できます。
 
-**→ https://sho-ai-magic.github.io/slide-md/**
+**→ https://sho-ai-magic.github.io/slide.md/**
 
 ![SLIDE-PATTERN ギャラリー](docs/Gallery.png)
 
