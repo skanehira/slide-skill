@@ -67,6 +67,8 @@ Step 4: SLIDE-DECK.md をAIツールへ → スライド完成
 
 **→ https://sho-ai-magic.github.io/slide-md/**
 
+![SLIDE-PATTERN ギャラリー](docs/Gallery.png)
+
 ## サンプルファイル
 
 - `examples/design-systems/SLIDE-md-anthropic/` — Anthropicのブランドカラーを参考に生成したデザインシステムの例
