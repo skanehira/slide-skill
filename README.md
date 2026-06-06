@@ -61,13 +61,17 @@ Step 3: slide-deck-builder → SLIDE-DECK.md（プレゼンごとに設計書を
 Step 4: SLIDE-DECK.md をAIツールへ → スライド完成
 ```
 
+## パターンギャラリー
+
+99種類のレイアウトパターンをブラウザで一覧確認できます。
+
+**→ https://sho-ai-magic.github.io/slide-md/**
+
 ## サンプルファイル
 
-`examples/` フォルダにサンプルが入っています。
-
 - `examples/design-systems/SLIDE-md-anthropic/` — Anthropicのブランドカラーを参考に生成したデザインシステムの例
-- `examples/patterns/` — 約100種類のレイアウトパターンの例（`gallery.html`をブラウザで開くと一覧確認できます）
 - `examples/output/SLIDE.md スキル紹介.pdf` — このスキルパッケージを紹介するスライドの生成例
+- `docs/patterns/` — 99種類のレイアウトパターンのHTMLファイル（ギャラリーから参照）
 
 ## 設計思想
 
