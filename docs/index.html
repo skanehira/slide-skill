@@ -105,6 +105,8 @@
     font-family: "SF Mono", "Fira Code", monospace;
     word-break: break-all;
   }
+
+  /* ===== オーバーレイ ===== */
   .overlay {
     display: none;
     position: fixed;
@@ -116,11 +118,14 @@
   }
   .overlay.active { display: flex; }
   .overlay-inner {
-    background: #E8E8E8;
+    background: #1A1A2E;
     border-radius: 8px;
     overflow: hidden;
-    max-width: 1000px;
-    width: 90vw;
+    max-width: 1040px;
+    width: 95vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
   }
   .overlay-header {
     background: #1A1A2E;
@@ -129,8 +134,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
   }
-  .overlay-header h3 { font-size: 14px; font-family: monospace; }
+  .overlay-header h3 {
+    font-size: 13px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    color: #CCC;
+  }
   .overlay-close {
     background: none;
     border: none;
@@ -140,7 +150,40 @@
     line-height: 1;
     padding: 0 4px;
   }
-  .overlay-body { padding: 20px; display: flex; justify-content: center; }
+
+  /* タブバー */
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    background: #111122;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 13px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: #CCC; }
+  .tab-btn.active { color: #FFF; border-bottom-color: #7B9CFF; }
+
+  /* タブパネル */
+  .tab-panel { display: none; flex-direction: column; overflow: hidden; }
+  .tab-panel.active { display: flex; }
+
+  /* プレビュータブ */
+  #tab-preview {
+    background: #E8E8E8;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+  }
   .overlay-iframe-wrap {
     width: 960px;
     max-width: 100%;
@@ -149,6 +192,61 @@
     overflow: hidden;
   }
   .overlay-iframe-wrap iframe { width: 960px; height: 540px; border: none; }
+
+  /* マークダウンタブ */
+  #tab-markdown {
+    background: #0D1117;
+    overflow: hidden;
+  }
+  .md-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px 16px;
+    background: #161B22;
+    border-bottom: 1px solid #30363D;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .md-toolbar-label {
+    font-size: 12px;
+    color: #8B949E;
+    font-family: "SF Mono", "Fira Code", monospace;
+  }
+  .copy-btn {
+    background: #21262D;
+    color: #C9D1D9;
+    border: 1px solid #30363D;
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    font-family: inherit;
+  }
+  .copy-btn:hover { background: #30363D; border-color: #6E7681; }
+  .copy-btn.copied { background: #238636; border-color: #2EA043; color: #FFF; }
+  .md-content-wrap {
+    overflow-y: auto;
+    flex: 1;
+    max-height: 60vh;
+  }
+  #overlay-md-content {
+    padding: 20px 24px;
+    font-family: "SF Mono", "Fira Code", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #C9D1D9;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #overlay-md-loading {
+    padding: 40px;
+    color: #8B949E;
+    font-size: 13px;
+    text-align: center;
+  }
+
   @media (max-width: 800px) {
     .toc-nav { padding: 10px 16px; }
     .main { padding: 20px 16px 40px; }
@@ -160,7 +258,7 @@
 
 <div class="header">
   <h1>SLIDE-PATTERN ギャラリー</h1>
-  <p>スライドレイアウトパターン一覧 — カードをクリックすると拡大表示</p>
+  <p>スライドレイアウトパターン一覧 — カードをクリックするとプレビューとMDファイルを確認できます</p>
   <div class="header-meta" id="header-meta"></div>
 </div>
 <nav class="toc-nav" id="toc-nav"></nav>
@@ -173,9 +271,25 @@
       <h3 id="overlay-title"></h3>
       <button class="overlay-close" onclick="closeOverlay()">✕</button>
     </div>
-    <div class="overlay-body">
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-btn-preview" onclick="switchTab('preview')">プレビュー</button>
+      <button class="tab-btn" id="tab-btn-markdown" onclick="switchTab('markdown')">MDファイル</button>
+    </div>
+    <!-- プレビュータブ -->
+    <div id="tab-preview" class="tab-panel active">
       <div class="overlay-iframe-wrap">
         <iframe id="overlay-iframe" src="" width="960" height="540"></iframe>
+      </div>
+    </div>
+    <!-- マークダウンタブ -->
+    <div id="tab-markdown" class="tab-panel">
+      <div class="md-toolbar">
+        <span class="md-toolbar-label" id="md-toolbar-label"></span>
+        <button class="copy-btn" id="copy-btn" onclick="copyMarkdown()">コピー</button>
+      </div>
+      <div class="md-content-wrap">
+        <div id="overlay-md-loading">読み込み中...</div>
+        <pre id="overlay-md-content" style="display:none"></pre>
       </div>
     </div>
   </div>
@@ -378,14 +492,14 @@ const CATEGORIES = [
 // 以下はHTML生成ロジック（通常は変更不要）
 // =============================================================
 
+let currentMdContent = '';
+
 function buildGallery() {
   const totalPatterns = CATEGORIES.reduce((sum, c) => sum + c.patterns.length, 0);
 
-  // ヘッダーのカウント更新
   document.getElementById('header-meta').textContent =
     `計 ${totalPatterns} パターン｜${CATEGORIES.length} カテゴリ`;
 
-  // 目次ナビ生成
   const nav = document.getElementById('toc-nav');
   CATEGORIES.forEach(cat => {
     const a = document.createElement('a');
@@ -394,14 +508,12 @@ function buildGallery() {
     nav.appendChild(a);
   });
 
-  // カテゴリセクション生成
   const main = document.getElementById('main');
   CATEGORIES.forEach(cat => {
     const section = document.createElement('section');
     section.className = 'category-section';
     section.id = cat.id;
 
-    // カテゴリヘッダー
     section.innerHTML = `
       <div class="category-header">
         <span class="category-icon">${cat.icon}</span>
@@ -413,7 +525,6 @@ function buildGallery() {
 
     const grid = section.querySelector('.pattern-grid');
 
-    // パターンカード生成
     cat.patterns.forEach(name => {
       const fullName = `SLIDE-PATTERN-${name}`;
       const card = document.createElement('div');
@@ -436,11 +547,39 @@ function buildGallery() {
 
 function openOverlay(name) {
   const overlay = document.getElementById('overlay');
-  const iframe = document.getElementById('overlay-iframe');
   document.getElementById('overlay-title').textContent = name;
-  iframe.src = `patterns/${name}/${name}.html`;
+  document.getElementById('overlay-iframe').src = `patterns/${name}/${name}.html`;
+  document.getElementById('md-toolbar-label').textContent = `${name}.md`;
+
+  // マークダウン読み込みリセット
+  currentMdContent = '';
+  document.getElementById('overlay-md-content').style.display = 'none';
+  document.getElementById('overlay-md-content').textContent = '';
+  document.getElementById('overlay-md-loading').style.display = 'block';
+  document.getElementById('overlay-md-loading').textContent = '読み込み中...';
+  resetCopyBtn();
+
+  // プレビュータブを初期表示
+  switchTab('preview');
+
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // MDファイルをバックグラウンドで取得
+  fetch(`patterns/${name}/${name}.md`)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.text();
+    })
+    .then(text => {
+      currentMdContent = text;
+      document.getElementById('overlay-md-content').textContent = text;
+      document.getElementById('overlay-md-content').style.display = 'block';
+      document.getElementById('overlay-md-loading').style.display = 'none';
+    })
+    .catch(() => {
+      document.getElementById('overlay-md-loading').textContent = 'MDファイルを読み込めませんでした。';
+    });
 }
 
 function closeOverlay(e) {
@@ -449,6 +588,30 @@ function closeOverlay(e) {
   document.getElementById('overlay').classList.remove('active');
   document.getElementById('overlay-iframe').src = '';
   document.body.style.overflow = '';
+  currentMdContent = '';
+}
+
+function switchTab(tab) {
+  document.getElementById('tab-preview').classList.toggle('active', tab === 'preview');
+  document.getElementById('tab-markdown').classList.toggle('active', tab === 'markdown');
+  document.getElementById('tab-btn-preview').classList.toggle('active', tab === 'preview');
+  document.getElementById('tab-btn-markdown').classList.toggle('active', tab === 'markdown');
+}
+
+function copyMarkdown() {
+  if (!currentMdContent) return;
+  navigator.clipboard.writeText(currentMdContent).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピーしました！';
+    btn.classList.add('copied');
+    setTimeout(resetCopyBtn, 2000);
+  });
+}
+
+function resetCopyBtn() {
+  const btn = document.getElementById('copy-btn');
+  btn.textContent = 'コピー';
+  btn.classList.remove('copied');
 }
 
 document.addEventListener('keydown', e => {
