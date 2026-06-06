@@ -69,10 +69,18 @@ Step 4: SLIDE-DECK.md をAIツールへ → スライド完成
 
 ![SLIDE-PATTERN ギャラリー](docs/Gallery.png)
 
+## 生成サンプル
+
+このスキルパッケージを使って生成したスライドの例です（[PDF全文はこちら](examples/output/SLIDE.md%20スキル紹介.pdf)）。
+
+![スライドサンプル 1](docs/slide-sample-01.png)
+![スライドサンプル 2](docs/slide-sample-02.png)
+![スライドサンプル 3](docs/slide-sample-03.png)
+
 ## サンプルファイル
 
 - `examples/design-systems/SLIDE-md-anthropic/` — Anthropicのブランドカラーを参考に生成したデザインシステムの例
-- `examples/output/SLIDE.md スキル紹介.pdf` — このスキルパッケージを紹介するスライドの生成例
+- `examples/output/SLIDE.md スキル紹介.pdf` — このスキルパッケージを紹介するスライドの生成例（全文）
 - `docs/patterns/` — 99種類のレイアウトパターンのHTMLファイル（ギャラリーから参照）
 
 ## 設計思想
