@@ -173,7 +173,7 @@ Claude Codeが自動で以下をセットアップします：
    - **Mac：** `/Users/（ユーザー名）/.claude/skills/`
    - **Windows：** `C:\Users\（ユーザー名）\.claude\skills\`
 3. プロジェクトフォルダ内に `SLIDE-md` フォルダと `SLIDE-PATTERN` フォルダを作成し、それぞれ以下をコピーします。
-   - `examples/SLIDE-md/` 内の4つのフォルダ → `SLIDE-md/` の中
+   - `docs/SLIDE-md/` 内の4つのフォルダ → `SLIDE-md/` の中
    - `docs/SLIDE-PATTERN/` 内の99個のフォルダ → `SLIDE-PATTERN/` の中
 
 ---
@@ -262,7 +262,7 @@ Step 5: SLIDE-DECK.md を Claude Design などのAIツールへ → スライド
 
 ## サンプルファイル
 
-**デザインシステムのサンプル（`examples/SLIDE-md/`）：**
+**デザインシステムのサンプル（`docs/SLIDE-md/`）：**
 
 | フォルダ | 説明 |
 |---------|------|
