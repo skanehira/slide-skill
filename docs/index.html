@@ -675,7 +675,7 @@ function buildGallery() {
       card.onclick = () => openOverlay(fullName);
       card.innerHTML = `
         <div class="slide-preview">
-          <iframe src="patterns/${fullName}/${fullName}.html" loading="lazy"></iframe>
+          <iframe src="SLIDE-PATTERN/${fullName}/${fullName}.html" loading="lazy"></iframe>
         </div>
         <div class="card-footer">
           <div class="pattern-name">${name}</div>
@@ -737,8 +737,8 @@ function openOverlayCore({ title, htmlSrc, mdSrc, mdLabel, isDS }) {
 function openOverlay(name) {
   openOverlayCore({
     title: name,
-    htmlSrc: `patterns/${name}/${name}.html`,
-    mdSrc:  `patterns/${name}/${name}.md`,
+    htmlSrc: `SLIDE-PATTERN/${name}/${name}.html`,
+    mdSrc:  `SLIDE-PATTERN/${name}/${name}.md`,
     mdLabel: `${name}.md`,
     isDS: false,
   });

@@ -174,7 +174,7 @@ Claude Codeが自動で以下をセットアップします：
    - **Windows：** `C:\Users\（ユーザー名）\.claude\skills\`
 3. プロジェクトフォルダ内に `SLIDE-md` フォルダと `SLIDE-PATTERN` フォルダを作成し、それぞれ以下をコピーします。
    - `examples/design-systems/` 内の4つのフォルダ → `SLIDE-md/` の中
-   - `docs/patterns/` 内の99個のフォルダ → `SLIDE-PATTERN/` の中
+   - `docs/SLIDE-PATTERN/` 内の99個のフォルダ → `SLIDE-PATTERN/` の中
 
 ---
 
@@ -276,7 +276,7 @@ Step 5: SLIDE-DECK.md を Claude Design などのAIツールへ → スライド
 特定のデザインシステムだけ使いたい場合は [ギャラリー](https://sho-ai-magic.github.io/slide.md/) でカードをクリックし、「SLIDE.md」タブからファイル内容をコピーして、プロジェクトフォルダ内の `SLIDE-md/SLIDE-md-{name}/SLIDE.md` として保存してもOKです。
 
 - `examples/output/SLIDE.md スキル紹介.pdf` — このスキルパッケージを紹介するスライドの生成例（全文）
-- `docs/patterns/` — 99種類のレイアウトパターンのHTMLファイル（ギャラリーから参照）
+- `docs/SLIDE-PATTERN/` — 99種類のレイアウトパターンのHTMLファイル（ギャラリーから参照）
 
 ## ライセンス
 
