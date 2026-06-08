@@ -206,6 +206,22 @@ Step 1で99種類のスライドパターンがセットアップされていま
 
 ブリーフ（タイトル・対象者・目的・枚数）をヒアリングした後、プレゼン内容を受け取り、SLIDE-DECK.md を生成します。このファイル1枚をAIツールに渡すだけでスライドが生成できます。
 
+### 5. AIツールでスライドを生成する
+
+> **注意：スライドの生成はClaude Codeではなく、別のAIツールで行います。**
+
+SLIDE-DECK.md はどのAIツール（NotebookLM、ChatGPT、Geminiなど）にも渡せますが、**Claude Codeユーザーには [Claude Design](https://claude.ai/design) がおすすめです。** ビジュアルデザインの生成に特化しており、高品質なスライドが生成できます。
+
+**Claude Design でスライドを生成する手順：**
+
+1. [claude.ai/design](https://claude.ai/design) を開きます（[claude.ai](https://claude.ai) の左上メニューの「Claude Design」からもアクセスできます）。
+2. チャット入力欄の添付ボタンから、Step 4 で生成した **`SLIDE-DECK-{name}.md`** をアップロードします。
+3. 以下のように話しかけます。
+
+   > 「添付のSLIDE-DECK.mdに従ってスライドを生成してください」
+
+4. Claude Design がデザインシステムとパターン定義を読み取り、スライドを生成します。
+
 ## ワークフロー
 
 ```
