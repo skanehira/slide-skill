@@ -252,11 +252,23 @@ Step 5: SLIDE-DECK.md を Claude Design などのAIツールへ → スライド
 
 ## 生成サンプル
 
+### サンプル1：SLIDE.md スキル紹介
+
 このスキルパッケージを使って生成したスライドの例です（[PDF全文はこちら](examples/output/SLIDE.md%20スキル紹介.pdf)）。
 
 ![スライドサンプル 1](docs/slide-sample-01.png)
 ![スライドサンプル 2](docs/slide-sample-02.png)
 ![スライドサンプル 3](docs/slide-sample-03.png)
+
+---
+
+### サンプル2：AI時代のスライド専用デザインシステム SLIDE.md
+
+本スキルをもとにClaude Designで生成したスライドの例です（[PDF全文はこちら](<examples/output/AI時代のスライド専用デザインシステム SLIDE.md.pdf>)）。
+
+![スライドサンプル2 1](docs/slide-sample2-01.png)
+![スライドサンプル2 2](docs/slide-sample2-02.png)
+![スライドサンプル2 3](docs/slide-sample2-03.png)
 
 ## サンプルファイル
 
