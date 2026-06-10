@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SLIDE-PATTERN ギャラリー</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -331,14 +332,20 @@
   /* スマホ対応 */
   @media (max-width: 600px) {
     .header { padding: 16px; }
-    .header h1 { font-size: 16px; }
-    .header p { font-size: 12px; }
-    .toc-nav { padding: 8px 12px; gap: 6px; }
-    .toc-nav a { font-size: 11px; padding: 4px 10px; }
-    .main { padding: 16px 12px 40px; }
-    .category-title { font-size: 15px; }
-    .pattern-grid { grid-template-columns: 1fr; gap: 12px; }
-    .ds-grid { grid-template-columns: 1fr; gap: 12px; }
+    .header h1 { font-size: 18px; }
+    .header p { font-size: 13px; }
+    .header-meta { font-size: 12px; }
+    .toc-nav { padding: 10px 12px; gap: 8px; }
+    .toc-nav a { font-size: 13px; padding: 6px 14px; }
+    .main { padding: 20px 12px 40px; }
+    .category-title { font-size: 16px; }
+    .category-count { font-size: 13px; }
+    .pattern-name { font-size: 14px; }
+    .ds-name { font-size: 14px; }
+    .ds-badge { font-size: 12px; }
+    .card-footer { padding: 12px 14px; }
+    .pattern-grid { grid-template-columns: 1fr; gap: 16px; }
+    .ds-grid { grid-template-columns: 1fr; gap: 16px; }
     .slide-preview { width: 100%; aspect-ratio: 16/9; height: auto; }
     .slide-preview iframe {
       width: 960px;
