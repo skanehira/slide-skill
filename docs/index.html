@@ -308,18 +308,19 @@
     padding: 2px 8px;
   }
 
-  /* デザインシステムオーバーレイのプレビュー（スクロール可能） */
+  /* デザインシステムオーバーレイのプレビュー */
   .ds-iframe-wrap {
-    width: 960px;
-    max-width: 100%;
+    width: 100%;
     height: 580px;
     position: relative;
     overflow: hidden;
   }
   .ds-iframe-wrap iframe {
     width: 960px;
-    height: 100%;
+    height: 580px;
     border: none;
+    display: block;
+    transform-origin: top left;
   }
 
   @media (max-width: 800px) {
@@ -381,7 +382,7 @@
     .tab-btn { font-size: 12px; padding: 9px 14px; }
     #tab-preview { padding: 10px; }
     .md-content-wrap { max-height: calc(100dvh - 130px); }
-    .ds-iframe-wrap { width: 100%; height: 300px; }
+    .ds-iframe-wrap { width: 100%; }
   }
 </style>
 </head>
@@ -750,11 +751,17 @@ function buildGallery() {
 
 function fitPreview() {
   const wrap = document.getElementById('overlay-preview-wrap');
-  if (!wrap || wrap.className !== 'overlay-iframe-wrap') return;
+  if (!wrap) return;
   const iframe = document.getElementById('overlay-iframe');
   const scale = wrap.clientWidth / 960;
+  if (scale >= 1) {
+    iframe.style.transform = '';
+    return;
+  }
   iframe.style.transform = `scale(${scale})`;
-  wrap.style.height = (540 * scale) + 'px';
+  iframe.style.transformOrigin = 'top left';
+  const baseH = wrap.className === 'overlay-iframe-wrap' ? 540 : 580;
+  wrap.style.height = (baseH * scale) + 'px';
 }
 
 window.addEventListener('resize', fitPreview);
@@ -770,8 +777,7 @@ function openOverlayCore({ title, htmlSrc, mdSrc, mdLabel, isDS }) {
   // プレビューラッパーをモードに応じて切り替え
   if (isDS) {
     wrap.className = 'ds-iframe-wrap';
-    document.getElementById('overlay-iframe').style.transform = '';
-    document.getElementById('overlay-iframe').style.height = '100%';
+    document.getElementById('overlay-iframe').style.height = '580px';
   } else {
     wrap.className = 'overlay-iframe-wrap';
     document.getElementById('overlay-iframe').style.height = '540px';
