@@ -282,7 +282,7 @@ SLIDE.mdで定義したデザイントークン（色・フォント・余白）
 - ヘッダー行（「DESIGN SYSTEM — {ソース名}」）はPrimaryカラーの背景に白テキストで表示する。フォントサイズは13px・padding 10px 20px
 - **上段（Overview）：** 背景色はPrimaryカラーを10〜15%の透明度で重ねた淡い色（またはSecondaryカラー）とし、「参照ソース：〇〇　／　マッチするシーン：〇〇」を1行で横並びに表示する。高さはスライド全体の約25%
 - **下段：** 残り75%の高さをflexboxで左右に分割する（左50%・右50%）
-- **下段左（Colors）：** 各色を横長のスウォッチバー（幅120px×高さ28px、border-radius: 4px）で実際の色を表示し、その右に「役割名」と「HEXコード」を縦2行で表示する。5色（Primary・Secondary・Background・Accent・Text）を縦に並べる。Backgroundカラーのスウォッチには1px solid #CCC程度の枠線を付けて白背景でも視認できるようにする
+- **下段左（Colors）：** 5色（Primary・Secondary・Background・Accent・Text）をカード形式で2列グリッドに並べる。各カードは `border: 1px solid #E5E5E5`・`border-radius: 10px`・`background: #FFF`・`overflow: hidden` で囲み、上部に色のスウォッチ（`height: 72px`・角丸なし）、下部のパディングエリア（`padding: 8px 10px`）に役割名（`font-size: 12px・font-weight: 600`）とHEXコード（`font-size: 11px・font-family: monospace・color: #888`）を縦に並べる。Backgroundカラーのスウォッチには `border-bottom: 1px solid #E5E5E5` を付けて白背景でも視認できるようにする
 - **下段右（Typography）：** 各フォント役割（Heading H1・H2・Body・Caption）について、役割ラベルをPrimaryカラーの10px大文字で、その下にサンプルテキストをそのフォント・サイズ・ウェイトで実際に適用して表示する。サンプルテキストは「あいう ABC 123」とする
 - 下段の左右の見出し（「Colors」「Typography」）はPrimaryカラーのテキスト・12px・font-weight: 600で各カラムの上部に表示し、細い区切り線（1px）を引く
 - スライドの枠（.slide）のpaddingは0にして、ヘッダー行・上段・下段がスライド全体を埋めるようにする
