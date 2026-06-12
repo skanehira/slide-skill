@@ -98,6 +98,9 @@
     padding: 10px 14px 12px;
     border-top: 1px solid #F0F0F0;
     background: #FDFDFD;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .pattern-name {
     font-size: 12px;
@@ -308,6 +311,93 @@
     padding: 2px 8px;
   }
 
+  /* ===== 選択機能 ===== */
+  .select-btn {
+    background: #F5F5F5;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 4px 10px;
+    cursor: pointer;
+    color: #555;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .select-btn:hover { background: #E0E0E0; color: #222; }
+  .pattern-card.selected { border: 2px solid #7B9CFF; }
+  .ds-card.selected { border: 2px solid #7B9CFF; }
+  .pattern-card.selected .select-btn,
+  .ds-card.selected .select-btn {
+    background: #1A1A2E;
+    border-color: #1A1A2E;
+    color: #FFF;
+  }
+  .select-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    background: #7B9CFF;
+    color: #FFF;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* エクスポートバー */
+  #export-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1A1A2E;
+    color: #FFF;
+    padding: 14px 24px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 200;
+    box-shadow: 0 -3px 12px rgba(0,0,0,0.4);
+  }
+  #export-bar.active { display: flex; }
+  #export-bar-label { font-size: 14px; color: #CCC; }
+  .export-bar-btns { display: flex; gap: 10px; align-items: center; }
+  .export-btn {
+    background: #7B9CFF;
+    color: #FFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    padding: 9px 22px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .export-btn:hover { background: #5A7AFF; }
+  .export-btn:disabled { background: #555; cursor: default; }
+  .reset-btn {
+    background: transparent;
+    color: #888;
+    border: 1px solid #555;
+    border-radius: 6px;
+    font-size: 13px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .reset-btn:hover { color: #CCC; border-color: #888; }
+
   /* デザインシステムオーバーレイのプレビュー */
   .ds-iframe-wrap {
     width: 100%;
@@ -383,6 +473,10 @@
     #tab-preview { padding: 10px; }
     .md-content-wrap { max-height: calc(100dvh - 130px); }
     .ds-iframe-wrap { width: 100%; }
+    #export-bar { padding: 10px 14px; }
+    #export-bar-label { font-size: 13px; }
+    .export-btn { font-size: 12px; padding: 8px 16px; }
+    .reset-btn { font-size: 12px; padding: 7px 12px; }
   }
 </style>
 </head>
@@ -424,6 +518,15 @@
         <pre id="overlay-md-content" style="display:none"></pre>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- エクスポートバー -->
+<div id="export-bar">
+  <span id="export-bar-label"></span>
+  <div class="export-bar-btns">
+    <button class="reset-btn" onclick="resetSelection()">選択をリセット</button>
+    <button class="export-btn" onclick="exportSelectedMd()">エクスポート</button>
   </div>
 </div>
 
@@ -656,6 +759,88 @@ const DESIGN_SYSTEMS = [
 
 let currentMdContent = '';
 
+// ===== 選択機能 =====
+let selectedItems = [];
+
+function toggleSelect(e, type, id, mdSrc, label, card) {
+  e.stopPropagation();
+  const idx = selectedItems.findIndex(item => item.id === id);
+  if (idx >= 0) {
+    selectedItems.splice(idx, 1);
+    card.classList.remove('selected');
+  } else {
+    selectedItems.push({ type, id, mdSrc, label, card });
+    card.classList.add('selected');
+  }
+  updateBadges();
+  updateExportBar();
+}
+
+function updateBadges() {
+  document.querySelectorAll('.select-badge').forEach(b => {
+    b.style.display = 'none';
+  });
+  selectedItems.forEach((item, i) => {
+    const badge = item.card.querySelector('.select-badge');
+    if (badge) {
+      badge.textContent = i + 1;
+      badge.style.display = 'flex';
+    }
+  });
+}
+
+function updateExportBar() {
+  const bar = document.getElementById('export-bar');
+  if (selectedItems.length > 0) {
+    bar.classList.add('active');
+    document.getElementById('export-bar-label').textContent =
+      `${selectedItems.length} 件選択中`;
+  } else {
+    bar.classList.remove('active');
+  }
+}
+
+function resetSelection() {
+  selectedItems.forEach(item => {
+    item.card.classList.remove('selected');
+    const badge = item.card.querySelector('.select-badge');
+    if (badge) badge.style.display = 'none';
+  });
+  selectedItems = [];
+  updateExportBar();
+}
+
+async function exportSelectedMd() {
+  if (selectedItems.length === 0) return;
+  const btn = document.querySelector('.export-btn');
+  btn.textContent = '準備中...';
+  btn.disabled = true;
+  try {
+    const parts = [];
+    for (const item of selectedItems) {
+      const res = await fetch(item.mdSrc);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      parts.push(text);
+    }
+    const combined = parts.join('\n\n---\n\n');
+    const blob = new Blob([combined], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'SLIDE-SELECTION.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert('ダウンロードに失敗しました。');
+  } finally {
+    btn.textContent = 'エクスポート';
+    btn.disabled = false;
+  }
+}
+
 function buildDesignSystems() {
   const main = document.getElementById('main');
   const section = document.createElement('section');
@@ -677,12 +862,16 @@ function buildDesignSystems() {
     card.innerHTML = `
       <div class="ds-preview">
         <iframe src="SLIDE-md/${ds.name}/sample.html" loading="lazy"></iframe>
+        <div class="select-badge"></div>
       </div>
       <div class="ds-card-footer">
         <div class="ds-name">${ds.name}</div>
-        <div class="ds-badge">${ds.desc}</div>
+        <button class="select-btn">選択</button>
       </div>
     `;
+    card.querySelector('.select-btn').addEventListener('click', e => {
+      toggleSelect(e, 'ds', ds.name, `SLIDE-md/${ds.name}/SLIDE.md`, ds.label || ds.name, card);
+    });
     grid.appendChild(card);
   });
   main.appendChild(section);
@@ -737,11 +926,16 @@ function buildGallery() {
       card.innerHTML = `
         <div class="slide-preview">
           <iframe src="SLIDE-PATTERN/${fullName}/${fullName}.html" loading="lazy"></iframe>
+          <div class="select-badge"></div>
         </div>
         <div class="card-footer">
           <div class="pattern-name">${name}</div>
+          <button class="select-btn">選択</button>
         </div>
       `;
+      card.querySelector('.select-btn').addEventListener('click', e => {
+        toggleSelect(e, 'pattern', fullName, `SLIDE-PATTERN/${fullName}/${fullName}.md`, name, card);
+      });
       grid.appendChild(card);
     });
 
