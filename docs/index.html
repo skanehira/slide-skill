@@ -401,13 +401,10 @@
   /* デザインシステムオーバーレイのプレビュー */
   .ds-iframe-wrap {
     width: 100%;
-    height: 580px;
     position: relative;
     overflow: hidden;
   }
   .ds-iframe-wrap iframe {
-    width: 960px;
-    height: 580px;
     border: none;
     display: block;
     transform-origin: top left;
@@ -732,24 +729,56 @@ const DESIGN_SYSTEMS = [
     name: "SLIDE-md-anthropic",
     label: "Anthropic",
     desc: "テクノロジー・AI関連のカンファレンス向け",
+    canvas: "1920x1080",
   },
   {
     id: "blue-simple-diagram",
     name: "SLIDE-md-blue-simple-diagram",
     label: "Blue Simple Diagram",
     desc: "シンプルな図解・データ向け",
+    canvas: "960x540",
   },
   {
     id: "digital",
     name: "SLIDE-md-digital",
     label: "デジタル庁（DADS）",
     desc: "行政・官公庁向けビジネス資料",
+    canvas: "1920x1080",
   },
   {
     id: "green-blue-business",
     name: "SLIDE-md-green-blue-business",
     label: "Green Blue Business",
     desc: "BtoBビジネス・営業資料向け",
+    canvas: "960x540",
+  },
+  {
+    id: "MintGreen",
+    name: "SLIDE-md-MintGreen",
+    label: "MintGreen（IR資料）",
+    desc: "決算説明・IR資料・投資家向けプレゼン",
+    canvas: "1920x1080",
+  },
+  {
+    id: "gemini-color-system",
+    name: "SLIDE-md-gemini-color-system",
+    label: "Gemini Color System",
+    desc: "AI系カンファレンス・テクノロジー系プレゼン",
+    canvas: "1920x1080",
+  },
+  {
+    id: "kintone-stylebook",
+    name: "SLIDE-md-kintone-stylebook",
+    label: "Kintone Stylebook",
+    desc: "BtoBビジネス発表・パートナー向けプレゼン",
+    canvas: "1920x1080",
+  },
+  {
+    id: "zenkigen-recruitment-slide",
+    name: "SLIDE-md-zenkigen-recruitment-slide",
+    label: "Zenkigen（採用資料）",
+    desc: "採用・企業紹介・スタートアップのカンファレンス",
+    canvas: "1920x1080",
   },
 ];
 
@@ -758,6 +787,7 @@ const DESIGN_SYSTEMS = [
 // =============================================================
 
 let currentMdContent = '';
+let currentDSCanvas = "960x540";
 
 // ===== 選択機能 =====
 let selectedItems = [];
@@ -856,12 +886,17 @@ function buildDesignSystems() {
   `;
   const grid = section.querySelector('.ds-grid');
   DESIGN_SYSTEMS.forEach(ds => {
+    const isNew = ds.canvas === "1920x1080";
+    const iframeW = isNew ? 1440 : 960;
+    const iframeH = isNew ? 810 : 540;
+    const scale = (180 / iframeH).toFixed(4);
     const card = document.createElement('div');
     card.className = 'ds-card';
-    card.onclick = () => openDSOverlay(ds.name, ds.label);
+    card.onclick = () => openDSOverlay(ds.name, ds.label, ds.canvas);
     card.innerHTML = `
       <div class="ds-preview">
-        <iframe src="SLIDE-md/${ds.name}/sample.html" loading="lazy"></iframe>
+        <iframe src="SLIDE-md/${ds.name}/sample.html" loading="lazy"
+          style="width:${iframeW}px;height:${iframeH}px;border:none;transform:scale(${scale});transform-origin:top left;pointer-events:none;"></iframe>
         <div class="select-badge"></div>
       </div>
       <div class="ds-card-footer">
@@ -947,20 +982,24 @@ function fitPreview() {
   const wrap = document.getElementById('overlay-preview-wrap');
   if (!wrap) return;
   const iframe = document.getElementById('overlay-iframe');
-  const scale = wrap.clientWidth / 960;
+  const isDS = wrap.className === 'ds-iframe-wrap';
+  const isNew = isDS && currentDSCanvas === "1920x1080";
+  const baseW = isNew ? 1440 : 960;
+  const baseH = isNew ? 810 : (isDS ? 540 : 540);
+  const scale = wrap.clientWidth / baseW;
   if (scale >= 1) {
     iframe.style.transform = '';
+    wrap.style.height = baseH + 'px';
     return;
   }
   iframe.style.transform = `scale(${scale})`;
   iframe.style.transformOrigin = 'top left';
-  const baseH = wrap.className === 'overlay-iframe-wrap' ? 540 : 580;
   wrap.style.height = (baseH * scale) + 'px';
 }
 
 window.addEventListener('resize', fitPreview);
 
-function openOverlayCore({ title, htmlSrc, mdSrc, mdLabel, isDS }) {
+function openOverlayCore({ title, htmlSrc, mdSrc, mdLabel, isDS, canvas }) {
   const overlay = document.getElementById('overlay');
   const wrap = document.getElementById('overlay-preview-wrap');
 
@@ -970,10 +1009,18 @@ function openOverlayCore({ title, htmlSrc, mdSrc, mdLabel, isDS }) {
 
   // プレビューラッパーをモードに応じて切り替え
   if (isDS) {
+    const isNew = canvas === "1920x1080";
+    const iframeW = isNew ? 1440 : 960;
+    const iframeH = isNew ? 810 : 540;
+    currentDSCanvas = canvas || "960x540";
     wrap.className = 'ds-iframe-wrap';
-    document.getElementById('overlay-iframe').style.height = '580px';
+    const iframe = document.getElementById('overlay-iframe');
+    iframe.style.width = iframeW + 'px';
+    iframe.style.height = iframeH + 'px';
   } else {
+    currentDSCanvas = "960x540";
     wrap.className = 'overlay-iframe-wrap';
+    document.getElementById('overlay-iframe').style.width = '960px';
     document.getElementById('overlay-iframe').style.height = '540px';
   }
   document.getElementById('overlay-iframe').src = htmlSrc;
@@ -1017,13 +1064,14 @@ function openOverlay(name) {
   });
 }
 
-function openDSOverlay(name, label) {
+function openDSOverlay(name, label, canvas) {
   openOverlayCore({
     title: label,
     htmlSrc: `SLIDE-md/${name}/sample.html`,
     mdSrc:  `SLIDE-md/${name}/SLIDE.md`,
     mdLabel: 'SLIDE.md',
     isDS: true,
+    canvas: canvas || "960x540",
   });
 }
 
