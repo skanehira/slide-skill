@@ -53,6 +53,10 @@ AIツール（Claude Design、NotebookLM、Google Slides等）にスライドを
 | Background | （色名） | #XXXXXX |
 | Accent | （色名） | #XXXXXX |
 | Text | （色名） | #XXXXXX |
+| Text Sub | （色名） | #XXXXXX |
+| Text Muted | （色名） | #XXXXXX |
+
+**グラデーション：** Primary → Secondary → Accent・90deg（横）など / なし
 
 ## Typography
 | 役割 | フォント | サイズ | ウェイト |
@@ -63,7 +67,7 @@ AIツール（Claude Design、NotebookLM、Google Slides等）にスライドを
 | キャプション | （フォント名） | 14px | Regular |
 
 ## Layout
-- **スライドサイズ：** 16:9（幅960px × 高さ540px）
+- **スライドサイズ：** 16:9（1920 × 1080 px）
 - **余白（上下）：** （px）
 - **余白（左右）：** （px）
 - **テキスト整列：** 左寄せ
